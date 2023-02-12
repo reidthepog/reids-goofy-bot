@@ -82,4 +82,4 @@ async def garfild(ctx, text: str):
 
 
 
-bot.run("MTA2NTYxNTA4NDMwMDI4MzkyNA.GW8Pps.zVxBONLFmKJr9bshmwBmgJInZxTf65jsjXDSK4")
+bot.run("BOT ID")
