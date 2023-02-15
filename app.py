@@ -70,7 +70,7 @@ async def garfild(ctx, text: str):
     for line in lines:
         w2,h2 = font.getsize(line)
         draw = ImageDraw.Draw(img)
-        draw.text((cx - w/2, y_text), line, fill=(0,0,0))
+        draw.text((cx - 17*2, y_text), line, fill=(0,0,0))
         img.save("edit.jpg")
         y_text += h2
 
