@@ -60,6 +60,7 @@ async def changelogs(ctx):
 async def garfild(ctx, text: str):
     
     #font = ImageFont.truetype("font.ttf", 30)
+    font = ImageFont.load_default()
     img = Image.open("pic.jpg")
     cx, cy = (325, 100)
     lines = textwrap.wrap(text, width=17)
@@ -69,7 +70,7 @@ async def garfild(ctx, text: str):
     for line in lines:
         w2,h2 = font.getsize(line)
         draw = ImageDraw.Draw(img)
-        draw.text((y_text, cx - w/2), line)
+        draw.text((cx - w/2, y_text), line, fill=(0,0,0))
         img.save("edit.jpg")
         y_text += h2
 
