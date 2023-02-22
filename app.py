@@ -6,6 +6,7 @@ import subprocess
 import requests
 from PIL import Image, ImageFont, ImageDraw
 import textwrap
+from decouple import config
 
 def callJokeApi():
     x = requests.get('https://v2.jokeapi.dev/joke/Any?safe-mode')
@@ -18,7 +19,6 @@ def callJokeApi():
 
 
 bot = discord.Bot()
-#put guild id(s) here
 guilds = []
 
 @bot.event
@@ -28,7 +28,7 @@ async def on_ready():
 
 @bot.slash_command(guild_ids=guilds, description = 'Basic command that greets you. Used to test uptime.')
 async def hello(ctx):
-    await ctx.respond(f"Hey, {ctx.author.id}!")
+    await ctx.respond(f"Hey, {ctx.author}!")
 
 @bot.slash_command(guild_ids=guilds, description = 'Random number generator. Defaults to 1-10')
 async def pickrandom(ctx, min = 1, max = 10):
@@ -51,17 +51,22 @@ async def joke(ctx):
 
 @bot.slash_command(guild_ids=guilds, description = "Shows current changelogs.")
 async def changelogs(ctx):
-    with open('/changelogs.txt', 'r') as f:
+    with open('/home/pi/discordBot/changelogs.txt', 'r') as f:
         data = f.read()
         await ctx.respond(data)
 
-#broken command :[
+@bot.slash_command(guild_ids=guilds, description = "Credits people smarter than me for what they did.")
+async def credits(ctx):
+    with open('/home/pi/discordBot/credits.txt', 'r') as f:
+        data = f.read()
+        await ctx.respond(data)
+
 @bot.slash_command(guild_ids=guilds, description = "Makes the silly garflid image speak (image by @willy on wasteof)")
 async def garfild(ctx, text: str):
     
-    #font = ImageFont.truetype("font.ttf", 30)
-    font = ImageFont.load_default()
-    img = Image.open("pic.jpg")
+    font = ImageFont.truetype("/home/pi/discordBot/font.ttf", 30)
+    #font = ImageFont.load_default()
+    img = Image.open("/home/pi/discordBot/pic.jpg")
     cx, cy = (325, 100)
     lines = textwrap.wrap(text, width=17)
     w, h = font.getsize(text)
@@ -70,11 +75,12 @@ async def garfild(ctx, text: str):
     for line in lines:
         w2,h2 = font.getsize(line)
         draw = ImageDraw.Draw(img)
-        draw.text((cx - 17*2, y_text), line, fill=(0,0,0))
-        img.save("edit.jpg")
+    
+        draw.text((cx - (w2/2) , y_text), line, fill=(0,0,0), font=font)
+        img.save("/home/pi/discordBot/edit.jpg")
         y_text += h2
 
-    await ctx.respond(file=discord.File('edit.jpg'))
+    await ctx.respond(file=discord.File('/home/pi/discordBot/edit.jpg'))
     
 
 
@@ -82,5 +88,5 @@ async def garfild(ctx, text: str):
     
 
 
-
-bot.run("BOT ID")
+token = config('TOKEN')
+bot.run(token)
